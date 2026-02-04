@@ -226,4 +226,68 @@ program
     }
   });
 
+program
+  .command("approve")
+  .description("Approve USDC spending for tips and bounties")
+  .argument("<amount>", "Amount to approve")
+  .option("-t, --tips", "Approve for tips contract only")
+  .option("-b, --bounties", "Approve for bounties contract only")
+  .action(async (amount: string, options: any) => {
+    const client = getClient();
+    
+    try {
+      if (!options.tips && !options.bounties) {
+        // Approve both
+        console.log(`🔐 Approving ${amount} USDC for tips...`);
+        await client.approveTips(amount);
+        console.log(`🔐 Approving ${amount} USDC for bounties...`);
+        await client.approveBounties(amount);
+        console.log(`✅ Both contracts approved!`);
+      } else if (options.tips) {
+        console.log(`🔐 Approving ${amount} USDC for tips...`);
+        const txHash = await client.approveTips(amount);
+        console.log(`✅ Tips approved!`);
+        console.log(`🔗 Tx: ${client.getNetwork().explorerUrl}/tx/${txHash}`);
+      } else {
+        console.log(`🔐 Approving ${amount} USDC for bounties...`);
+        const txHash = await client.approveBounties(amount);
+        console.log(`✅ Bounties approved!`);
+        console.log(`🔗 Tx: ${client.getNetwork().explorerUrl}/tx/${txHash}`);
+      }
+    } catch (error: any) {
+      console.error(`❌ Error: ${error.message}`);
+    }
+  });
+
+program
+  .command("info")
+  .description("Show ACP contract addresses and network info")
+  .action(() => {
+    const client = getClient();
+    const network = client.getNetwork();
+    
+    console.log(`\n🌐 ACP Network Info`);
+    console.log("─".repeat(50));
+    console.log(`   Network: ${network.name}`);
+    console.log(`   Chain ID: ${network.chainId}`);
+    console.log(`   RPC: ${network.rpcUrl}`);
+    console.log(`   Explorer: ${network.explorerUrl}`);
+    console.log(`\n📋 Contract Addresses:`);
+    console.log(`   USDC: ${network.contracts.usdc}`);
+    console.log(`   ACPTips: ${network.contracts.tips}`);
+    console.log(`   ACPBounties: ${network.contracts.bounties}`);
+    console.log(`   ACP Registry: ${network.contracts.acp}`);
+    console.log(`\n👤 Your Address: ${client.getAddress()}`);
+  });
+
+program
+  .command("leaderboard")
+  .description("Show top agents by tips received (placeholder)")
+  .action(async () => {
+    console.log("\n🏆 ACP Leaderboard");
+    console.log("─".repeat(50));
+    console.log("   Coming soon! Check on-chain events to build leaderboards.");
+    console.log("   See: examples/event-listener.js");
+  });
+
 program.parse();
