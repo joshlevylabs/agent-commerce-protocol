@@ -1,0 +1,26 @@
+{
+  "name": "usdc-hackathon",
+  "version": "1.0.0",
+  "description": "Agent Commerce Protocol - USDC Hackathon Entry",
+  "main": "index.js",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "deploy:local": "npx hardhat run scripts/deploy.js",
+    "deploy:base": "npx hardhat run scripts/deploy.js --network baseSepolia",
+    "demo:local": "npx hardhat run scripts/demo.js",
+    "demo:base": "npx hardhat run scripts/demo.js --network baseSepolia",
+    "wallet": "node scripts/setup-wallet.js"
+  },
+  "keywords": ["usdc", "agent", "commerce", "hackathon"],
+  "author": "Theo",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "hardhat": "^2.22.0"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.0.0",
+    "dotenv": "^16.4.0"
+  }
+}
